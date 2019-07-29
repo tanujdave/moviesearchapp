@@ -8,12 +8,15 @@ from ..service.user_service import save_new_user, get_all_users, get_a_user
 api = UserDto.api
 _user = UserDto.user
 
+parser = api.parser()
+parser.add_argument('Authorization', location='headers')
 
 @api.route('/')
 class UserList(Resource):
     @api.doc('list_of_registered_users')
-    @admin_token_required
     @api.marshal_list_with(_user, envelope='data')
+    @admin_token_required
+    @api.expect(parser)
     def get(self):
         """List all registered users"""
         return get_all_users()
@@ -30,9 +33,11 @@ class UserList(Resource):
 @api.route('/<public_id>')
 @api.param('public_id', 'The User identifier')
 @api.response(404, 'User not found.')
+@api.expect(parser)
 class User(Resource):
     @api.doc('get a user')
     @api.marshal_with(_user)
+    @admin_token_required
     def get(self, public_id):
         """get a user given its identifier"""
         user = get_a_user(public_id)

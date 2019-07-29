@@ -34,30 +34,6 @@ class Auth:
             return response_object, 500
 
     @staticmethod
-    def logout_user(data):
-        if data:
-            auth_token = data.split(" ")[1]
-        else:
-            auth_token = ''
-        if auth_token:
-            resp = User.decode_auth_token(auth_token)
-            if not isinstance(resp, str):
-                # mark the token as blacklisted
-                return save_token(token=auth_token)
-            else:
-                response_object = {
-                    'status': 'fail',
-                    'message': resp
-                }
-                return response_object, 401
-        else:
-            response_object = {
-                'status': 'fail',
-                'message': 'Provide a valid auth token.'
-            }
-            return response_object, 403
-
-    @staticmethod
     def get_logged_in_user(new_request):
             # get the auth token
             auth_token = new_request.headers.get('Authorization')
