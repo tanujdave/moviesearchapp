@@ -30,7 +30,7 @@ class MovieSearch(Resource):
 class MovieList(Resource):
 
     @api.doc('list_of_all_movies')
-    @token_required
+    # @token_required
     @api.marshal_list_with(_movie, envelope='data')
     def get(self):
         """List all movies"""
